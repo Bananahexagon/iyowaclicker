@@ -1,0 +1,7 @@
+[
+    {
+        "type": "image",
+        "name": "example",
+        "src": "./assets/example.png"
+    }
+]
