@@ -33,6 +33,9 @@ type CoreT = {
     props: Dict<any>,
     cLib: cLibT,
     Sprite: SpriteT,
+    while: (condition: () => boolean, proc: () => void) => void,
+    for: (condition: number, proc: (arg: number) => void, i: number) => void,
+    loop: (proc: () => void) => void,
 }
 let tmp = class {
     x: number;

@@ -1,5 +1,6 @@
 import { Dict } from "./utils";
 import { CoreT, configT, cLibT } from "./types";
+import {frameWhile,frameFor,frameLoop} from "./frame";
 import { loadAssets } from "./loader";
 import { CanvasLibGen } from "./canvas";
 import { SpriteLibGen } from "./sprite";
@@ -79,6 +80,7 @@ export const init = async (config: configT): Promise<CoreT> => {
     };
     const cLib = CanvasLibGen(ctx, Images, config, props.canvas);
     const Sprite = SpriteLibGen(cLib);
+    
     return {
         canvas,
         ctx,
@@ -88,5 +90,8 @@ export const init = async (config: configT): Promise<CoreT> => {
         props,
         cLib,
         Sprite,
+        for: frameFor,
+        while: frameWhile,
+        loop:frameLoop,
     }
 }
