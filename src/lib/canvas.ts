@@ -13,8 +13,8 @@ export const CanvasLibGen = (ctx: CanvasRenderingContext2D, Images: { [keys: str
             ctx.drawImage(costume, (-sw * size / 200) * config.display_quality, (-sh * size / 200) * config.display_quality, (sw * size / 100) * config.display_quality, (sh * size / 100) * config.display_quality);
             ctx.restore();
         } else {
-            const x = + (sin360(props.d) * dx + cos360(props.d) * dy + props.x) * props.size / 100;
-            const y = + (cos360(props.d) * dx - sin360(props.d) * dy + props.x) * props.size / 100;
+            const x = + (cos360(props.d) * dx - sin360(props.d) * dy + props.x) * props.size / 100;
+            const y = + (-sin360(props.d) * dx - cos360(props.d) * dy + props.x) * props.size / 100;
             const d = dd + props.d;
             stamp(name, x, y, d, size * props.size / 100, true);
         }
