@@ -7,8 +7,8 @@ import { SpriteLibGen } from "./sprite";
 
 export const init = async (config: configT): Promise<CoreT> => {
     const canvas = document.getElementById(config.canvas_name) as HTMLCanvasElement;
-    canvas.height = config.display_width * config.display_quality;
-    canvas.width = config.display_height * config.display_quality;
+    canvas.height = config.display_height * config.display_quality;
+    canvas.width = config.display_width * config.display_quality;
     const ctx = canvas.getContext("2d")!;
     const { Images, Audios } = await loadAssets();
     const inputKeys = {
