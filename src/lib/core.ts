@@ -10,6 +10,7 @@ export const init = async (config: configT): Promise<CoreT> => {
     canvas.height = config.display_height * config.display_quality;
     canvas.width = config.display_width * config.display_quality;
     const ctx = canvas.getContext("2d")!;
+    ctx.imageSmoothingEnabled = false;
     const { Images, Audios } = await loadAssets();
     const inputKeys = {
         up: false, down: false, left: false, right: false, z: false, x: false, c: false,
@@ -78,7 +79,7 @@ export const init = async (config: configT): Promise<CoreT> => {
             d: 0,
         },
     };
-    const cLib = CanvasLibGen(ctx, Images, config, props.canvas);
+    const cLib: cLibT = CanvasLibGen(canvas,ctx, Images, config, props.canvas);
     const Sprite = SpriteLibGen(cLib);
     
     return {

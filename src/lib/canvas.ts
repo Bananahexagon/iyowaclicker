@@ -1,14 +1,14 @@
-import { configT ,CanvasProps} from "./types";
+import { configT, CanvasProps } from "./types";
 import { sin360, cos360 } from "./utils";
 
-export const CanvasLibGen = (ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, }, config: configT, props: CanvasProps) => {
+export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, }, config: configT, props: CanvasProps) => {
     const stamp = (name: string, dx: number, dy: number, dd: number = 0, size: number = 100, absolute = false) => {
         if (absolute) {
             const costume = Images[name];
             const sw = costume.width;
             const sh = costume.height;
             ctx.save();
-            ctx.translate(dx * config.display_quality, dy * config.display_quality);
+            ctx.translate(dx * config.display_quality, dy * config.display_quality+ canvas.height);
             ctx.rotate(dd * Math.PI / 180);
             ctx.drawImage(costume, (-sw * size / 200) * config.display_quality, (-sh * size / 200) * config.display_quality, (sw * size / 100) * config.display_quality, (sh * size / 100) * config.display_quality);
             ctx.restore();

@@ -42,15 +42,15 @@ let tmp = class {
     y: number;
     d: number;
     size: number;
-    costume: Opt<string>;
+    costume: string;
     visible: boolean;
-    constructor() {
-        this.x = 0;
-        this.y = 0;
-        this.d = 0;
-        this.size = 100;
-        this.costume = Opt.None();
-        this.visible = false;
+    constructor(x: number, y: number, d: number = 0, size: number = 100, costume: string, visible: boolean = false) {
+        this.x = x;
+        this.y = y;
+        this.d = d;
+        this.size = size;
+        this.costume = costume;
+        this.visible = visible;
     }
     stamp(): void { }
     move(far: number): void { }
