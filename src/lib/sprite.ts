@@ -1,7 +1,7 @@
-import { CoreT, cLibT, SpriteT } from "./types";
+import { CoreT, cLibT, SpriteClassT } from "./types";
 import { Dict, Opt, sin360, cos360 } from "./utils"
 
-export const SpriteLibGen = (cLib: cLibT): SpriteT => {
+export const SpriteLibGen = (cLib: cLibT): SpriteClassT => {
     class Sprite {
         x: number;
         y: number;
@@ -9,7 +9,7 @@ export const SpriteLibGen = (cLib: cLibT): SpriteT => {
         size: number;
         costume: string;
         visible: boolean;
-        constructor(x: number, y: number, d: number = 0, size: number = 100, costume: string, visible: boolean = false) {
+        constructor(x: number, y: number, d: number = 0, size: number = 100, costume: string = "", visible: boolean = false) {
             this.x = x;
             this.y = y;
             this.d = d;

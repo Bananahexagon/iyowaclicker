@@ -30,21 +30,22 @@ type CoreT = {
     inputKeys: {
         up: boolean, down: boolean, left: boolean, right: boolean, z: boolean, x: boolean, c: boolean,
     };
+    inputMouse: { x: number, y: number, clicking: boolean },
     props: Dict<any>,
     cLib: cLibT,
-    Sprite: SpriteT,
+    Sprite: SpriteClassT,
     while: (condition: () => boolean, proc: () => void) => void,
     for: (condition: number, proc: (arg: number) => void, i: number) => void,
     loop: (proc: () => void) => void,
 }
-let tmp = class {
+class SpriteClass {
     x: number;
     y: number;
     d: number;
     size: number;
     costume: string;
     visible: boolean;
-    constructor(x: number, y: number, d: number = 0, size: number = 100, costume: string, visible: boolean = false) {
+    constructor(x: number, y: number, d: number = 0, size: number = 100, costume: string = "", visible: boolean = false) {
         this.x = x;
         this.y = y;
         this.d = d;
@@ -55,14 +56,15 @@ let tmp = class {
     stamp(): void { }
     move(far: number): void { }
 };
-type SpriteT = typeof tmp;
-
-
+type SpriteClassT = typeof SpriteClass;
+const Sprite = new SpriteClass(0, 0);
+type SpriteT = typeof Sprite;
 export {
     CoreT,
     cLibT,
     configT,
     Assets,
     CanvasProps,
-    SpriteT,
+    SpriteClassT,
+    SpriteT
 }
