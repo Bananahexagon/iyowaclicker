@@ -33,7 +33,7 @@ export const main = async (API: apiT) => {
     const small_hexagons: Dict<SmallHexagon> = {};
     window.addEventListener("mousedown", (e) => {
         if (distance(hexagon.x, hexagon.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
-            small_hexagons[timer] = new SmallHexagon(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 10 + 3, Math.random() * 10, 100);
+            small_hexagons[timer] = new SmallHexagon(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
             hexagon.size -= 30;
             API.iyowa += 1;
             API.update();
