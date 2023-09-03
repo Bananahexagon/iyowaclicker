@@ -34,8 +34,8 @@ export const main = async (API: apiT) => {
     window.addEventListener("mousedown", (e) => {
         if (distance(hexagon.x, hexagon.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
             small_hexagons[timer] = new SmallHexagon(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
-            hexagon.size -= 30;
-            API.iyowa += 1;
+            hexagon.size += 30;
+            API.iyowa += API.ipc;
             API.update();
         }
     })

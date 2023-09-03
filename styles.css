@@ -1,5 +1,6 @@
 html,
-body {
+body,
+main {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -10,10 +11,30 @@ body {
     background-color: #111;
 }
 
-div#left-part {
-    position:absolute;
+main {
+    position: absolute;
     margin: auto;
     inset: 0;
+    height: 630px;
+    width: 1120px;
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+div.sub-main {
+    display: flex;
+    flex-direction: row;
+}
+
+div#left-part {
+    height: 100%;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+div#right-part {
     height: 100%;
     width: 320px;
     display: flex;
@@ -28,6 +49,29 @@ iyowa-meter {
     text-align: center;
 }
 
+buy-igusuri {
+    user-select: none;
+    height: 80px;
+    background-color: #f8ced8;
+    display:flex;
+    flex-direction: row;
+}
+
+buy-igusuri:hover {
+    background-color: #f49ea7;
+}
+
+buy-igusuri img {
+    height: 50px;
+    width:50px;
+    image-rendering: pixelated;
+}
+
+.igusuri-name {
+    color: #fff;
+    size: 60px;
+}
+
 canvas {
     width: 320px;
     height: 480px;
@@ -38,7 +82,20 @@ canvas {
     image-rendering: pixelated;
 }
 
-div#left-part::after, div#left-part::before {
+main::after,
+main::before {
+    content: "";
+    flex-grow: 1;
+}
+
+.vertical-center {
+    height:100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.vertical-center::after,
+.vertical-center::before {
     content: "";
     flex-grow: 1;
 }
