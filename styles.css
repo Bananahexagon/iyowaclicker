@@ -1,13 +1,44 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
 body {
     background-color: #111;
 }
 
+div#left-part {
+    position:absolute;
+    margin: auto;
+    inset: 0;
+    height: 100%;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+iyowa-meter {
+    font-size: 2em;
+    color: white;
+    background-color: #f8ced8;
+    user-select: none;
+    text-align: center;
+}
+
 canvas {
-    width: 640px;
+    width: 320px;
     height: 480px;
-    position: absolute;
     margin: auto;
     background-color: #000;
+    background-color: #f8ced8;
     inset: 0;
     image-rendering: pixelated;
+}
+
+div#left-part::after, div#left-part::before {
+    content: "";
+    flex-grow: 1;
 }
