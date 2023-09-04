@@ -33,9 +33,26 @@ class BuyIgusuri extends HTMLElement {
     }
 }
 
+const create_igusuri_panel = (char: string) => {
+    const name = {
+        "kk": "胃薬（きゅうくらりん）",
+        "ap": "胃薬（あだぽしゃ）",
+        "kn": "胃薬（くろうばあないと）",
+        "lm": "胃薬（1000年生きてる）",
+    }[char];
+    const right_part = document.getElementById("right-part");
+    right_part?.insertAdjacentHTML("afterbegin", `<buy-igusuri type="${char} onClick="buy_igusuri(${char})"></buy-igusuri>`)
+}
+
+
+
 export const main = (API: apiT) => {
     customElements.define("iyowa-meter", IyowaMeter);
     customElements.define("buy-igusuri", BuyIgusuri);
+    create_igusuri_panel("kk");
+    create_igusuri_panel("ap");
+    create_igusuri_panel("kn");
+    create_igusuri_panel("lm");
     const iyowa_meter = document.getElementById("iyowa") as IyowaMeter;
     API.update = () => { iyowa_meter.innerText = `${API.iyowa} Iyowa` };
 }
