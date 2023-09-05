@@ -2,9 +2,9 @@ import { init } from "./lib/core";
 import { CoreT, SpriteT } from "./lib/types";
 import { Dict, Opt, sin360, distance } from "./lib/utils";
 import config from "./config.json";
-import { apiT } from "./index";
+import { APIT } from "./index";
 
-export const main = async (API: apiT) => {
+export const main = async (API: APIT) => {
     const Game: CoreT = await init(config);
     let timer = 0;
     class SmallHexagon extends Game.Sprite {
@@ -36,7 +36,7 @@ export const main = async (API: apiT) => {
             small_hexagons[timer] = new SmallHexagon(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
             hexagon.size += 30;
             API.iyowa += API.ipc;
-            API.update();
+            API.update.how_many_iyowa();
         }
     })
     Game.loop(() => {
