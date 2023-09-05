@@ -6,5 +6,5 @@ export type apiT = {
     update: Function,
     buy_igusuri: Function,
 }
-const API: apiT = { iyowa: 0, ipc: 1 ,update: () => { } };
+const API: apiT = { iyowa: 0, ipc: 1, update: () => { }, buy_igusuri: () => { } };
 window.onload = () => { page(API); game(API); };
