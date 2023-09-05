@@ -41,7 +41,7 @@ const create_igusuri_panel = (char: string) => {
         "lm": "胃薬（1000年生きてる）",
     }[char];
     const right_part = document.getElementById("right-part");
-    right_part?.insertAdjacentHTML("afterbegin", `<buy-igusuri type="${char} onClick="buy_igusuri(${char})"></buy-igusuri>`)
+    right_part?.insertAdjacentHTML("afterbegin", `<buy-igusuri type="${char} onClick="API.buy_igusuri(${char})"></buy-igusuri>`)
 }
 
 
@@ -55,4 +55,7 @@ export const main = (API: apiT) => {
     create_igusuri_panel("lm");
     const iyowa_meter = document.getElementById("iyowa") as IyowaMeter;
     API.update = () => { iyowa_meter.innerText = `${API.iyowa} Iyowa` };
+    API.buy_igusuri = (char: string) => {
+        API.ipc *= 5;
+    };
 }
