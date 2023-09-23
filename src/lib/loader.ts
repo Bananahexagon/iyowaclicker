@@ -1,5 +1,6 @@
 import { Dict } from "./utils";
-import {Assets } from "./types";
+import { Assets } from "./types";
+import json from "../assets.json";
 
 export const loadAssets = async (): Promise<Assets> => {
     type AssetData = {
@@ -10,7 +11,7 @@ export const loadAssets = async (): Promise<Assets> => {
     let Images: Dict<HTMLImageElement> = {};
     let Audios: Dict<HTMLAudioElement> = {};
 
-    const index: AssetData[] = (await import("../assets.json")).default as unknown as AssetData[];
+    const index: AssetData[] = json as unknown as AssetData[];
     let promises: Promise<void>[] = [];
     console.log(index)
     index.forEach((e: AssetData) => promises.push(new Promise((resolve) => {
