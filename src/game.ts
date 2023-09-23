@@ -2,12 +2,11 @@ import { init } from "./lib/core";
 import { CoreT, SpriteT } from "./lib/types";
 import { Dict, Opt, sin360, distance } from "./lib/utils";
 import config from "./config.json";
-import { APIT } from "./index";
 
-export const main = async (API: APIT) => {
+export const main = async () => {
     const Game: CoreT = await init(config);
     let timer = 0;
-    class SmallHexagon extends Game.Sprite {
+    class SmallIyowa extends Game.Sprite {
         jump_x: number;
         jump_y: number;
         jump_d: number;
@@ -29,29 +28,32 @@ export const main = async (API: APIT) => {
             this.age += 1;
         }
     }
-    const hexagon = new Game.Sprite(160, 240, 0, 100, "iyowa", true);
-    const small_hexagons: Dict<SmallHexagon> = {};
+    const iyowa = new Game.Sprite(160, 240, 0, 100, "iyowa", true);
+    const small_iyowas: Dict<SmallIyowa> = {};
+    let API = {
+        iyowa: 0,
+        ipc: 1,
+    }
     window.addEventListener("mousedown", (e) => {
-        if (distance(hexagon.x, hexagon.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
-            small_hexagons[timer] = new SmallHexagon(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
-            hexagon.size += 30;
-            API.iyowa += API.ipc;
-            API.update.how_many_iyowa();
+        if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
+            small_iyowas[timer] = new SmallIyowa(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
+            iyowa.size += 30;
         }
     })
     Game.loop(() => {
         Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height)
-        hexagon.d = sin360(timer * 2) * 5;
-        hexagon.size = Math.max(75, 40 + hexagon.size * 0.6)
-        hexagon.stamp();
+        iyowa.d = sin360(timer * 2) * 5;
+        iyowa.size = Math.max(75, 40 + iyowa.size * 0.6)
+        iyowa.stamp();
         timer++;
-        for (const i in small_hexagons) {
-            const e = small_hexagons[i];
-            if (!(e.age < e.life)) delete small_hexagons[i];
+        for (const i in small_iyowas) {
+            const e = small_iyowas[i];
+            if (!(e.age < e.life)) delete small_iyowas[i];
             else {
                 e.proc();
                 e.stamp();
             }
         }
+        Game.cLib.drawText(`${API.iyowa} iyowa`, 50, 50, 20)
     })
 };
