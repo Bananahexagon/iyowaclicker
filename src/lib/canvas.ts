@@ -23,17 +23,24 @@ export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
 
         ctx.save();
         switch (type) {
-            case "center": {
-                ctx.translate(dx * config.display_quality, dy * config.display_quality);
+            case "center++": {
+                ctx.translate(dx * config.display_quality, -dy * config.display_quality + canvas.height);
                 ctx.rotate(direction * Math.PI / 180);
                 ctx.beginPath();
                 ctx.rect((-width / 2) * config.display_quality, (-height / 2) * config.display_quality, (width) * config.display_quality, (height) * config.display_quality);
             } break;
-            case "start": {
-                ctx.translate((dx - width / 2) * config.display_quality, (dy - height / 2) * config.display_quality);
+            case "center": {
+                ctx.translate((dx - width / 2) * config.display_quality, -(dy - height / 2) * config.display_quality + canvas.height);
                 ctx.rotate(direction * Math.PI / 180);
                 ctx.beginPath();
-                ctx.rect(0, 0, (width) * config.display_quality, (height) * config.display_quality);
+                ctx.rect(0, 0, (width) * config.display_quality, -(height) * config.display_quality);
+            } break;
+            case "start":
+            default: {
+                ctx.translate(dx * config.display_quality, -dy * config.display_quality + canvas.height);
+                ctx.rotate(direction * Math.PI / 180);
+                ctx.beginPath();
+                ctx.rect(0, 0, (width) * config.display_quality, -(height) * config.display_quality);
             } break;
         }
         ctx.fillStyle = color;
@@ -44,12 +51,12 @@ export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
         ctx.beginPath();
         switch (type) {
             case 0: {
-                ctx.moveTo((lx - len * Math.sin(d) / 2) * config.display_quality, (ly + len * Math.cos(d) / 2) * config.display_quality);
-                ctx.lineTo((lx + len * Math.sin(d) / 2) * config.display_quality, (ly - len * Math.cos(d) / 2) * config.display_quality);
+                ctx.moveTo((lx - len * Math.sin(d) / 2) * config.display_quality, -(ly + len * Math.cos(d) / 2) * config.display_quality + canvas.height);
+                ctx.lineTo((lx + len * Math.sin(d) / 2) * config.display_quality, -(ly - len * Math.cos(d) / 2) * config.display_quality + canvas.height);
             } break;
             case 1: {
-                ctx.moveTo(lx * config.display_quality, ly * config.display_quality);
-                ctx.lineTo((lx + len * Math.sin(d)) * config.display_quality, (ly - len * Math.cos(d)) * config.display_quality);
+                ctx.moveTo(lx * config.display_quality, -ly * config.display_quality + canvas.height);
+                ctx.lineTo((lx + len * Math.sin(d)) * config.display_quality, -(ly - len * Math.cos(d)) * config.display_quality + canvas.height);
             } break;
         }
         ctx.strokeStyle = color;
@@ -57,7 +64,7 @@ export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
         ctx.stroke();
     }
     const drawText = (tx: string, lx: number, ly: number, size: number, color: string, font: string = "serif", align: "left" | "right" | "center" | "start" | "end" = "left") => {
-        let [x, y] = [lx * config.display_quality, ly * config.display_quality];
+        let [x, y] = [lx * config.display_quality, -ly * config.display_quality + canvas.height];
         ctx.font = `${size * config.display_quality}px ${font}`;
         ctx.textAlign = align;
         ctx.fillStyle = color;

@@ -4,13 +4,13 @@ import json from "../assets.json";
 
 export const loadAssets = async (): Promise<Assets> => {
     type AssetData = {
-        type: "image" | "audio",
+        type: "image" | "audio" | "font",
         src: string,
         name: string,
     }
     let Images: Dict<HTMLImageElement> = {};
     let Audios: Dict<HTMLAudioElement> = {};
-
+    let Fonts: Dict<FontFace> = {};
     const index: AssetData[] = json as unknown as AssetData[];
     let promises: Promise<void>[] = [];
     console.log(index)
@@ -32,8 +32,16 @@ export const loadAssets = async (): Promise<Assets> => {
                     resolve();
                 }
             } break;
+            case "font" : {
+                let font = new FontFace(e.name, e.src);
+                font.load().then(() => {
+                    
+                    Fonts[e.name] = font;
+                    resolve();
+                })
+            }
         }
     })));
     await Promise.all(promises);
-    return { Images, Audios };
+    return { Images, Audios, Fonts };
 };

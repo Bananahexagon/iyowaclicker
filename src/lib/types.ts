@@ -1,4 +1,6 @@
 import { Dict, Opt } from "./utils"
+type bool = boolean;
+
 type cLibT = {
     stamp: (name: string, dx: number, dy: number, dd?: number, size?: number, absolute?: boolean) => void;
     drawRect: (dx: number, dy: number, width: number, height: number, color: string, direction?: number, type?: string) => void;
@@ -13,8 +15,9 @@ type configT = {
     canvas_name: string,
 }
 type Assets = {
-    Images: { [keys: string]: HTMLImageElement, },
-    Audios: { [keys: string]: HTMLAudioElement, },
+    Images: Dict<HTMLImageElement>
+    Audios: Dict<HTMLAudioElement>,
+    Fonts: Dict<FontFace>,
 }
 type CanvasProps = {
     x: number,
@@ -28,10 +31,11 @@ type CoreT = {
     ctx: CanvasRenderingContext2D,
     Images: Dict<HTMLImageElement>,
     Audios: Dict<HTMLAudioElement>,
+    Fonts: Dict<FontFace>,
     inputKeys: {
         up: boolean, down: boolean, left: boolean, right: boolean, z: boolean, x: boolean, c: boolean,
     };
-    inputMouse: { x: number, y: number, clicking: boolean },
+    inputMouse: { x: number, y: number, clicking: boolean, is_in_rect: (dx: number, dy: number, w: number, h: number, type?: string) => boolean },
     props: Dict<any>,
     cLib: cLibT,
     Sprite: SpriteClassT,
@@ -67,5 +71,6 @@ export {
     Assets,
     CanvasProps,
     SpriteClassT,
-    SpriteT
+    SpriteT,
+    bool
 }

@@ -11,13 +11,24 @@ export const init = async (config: configT): Promise<CoreT> => {
     canvas.height = config.display_height * config.display_quality;
     canvas.width = config.display_width * config.display_quality;
     const ctx = canvas.getContext("2d")!;
-    const { Images, Audios } = await loadAssets();
+    const { Images, Audios, Fonts } = await loadAssets();
     const inputKeys = {
         up: false, down: false, left: false, right: false, z: false, x: false, c: false,
     };
     const inputMouse = {
-        x: 0, y: 0, clicking: false
+        x: 0, y: 0, clicking: false, is_in_rect(dx: number, dy: number, w: number, h: number, type: string = "center") {
+            switch (type) {
+                case "center": {
+                    return (dx - w / 2 < this.x && this.x < dx + w / 2) && (dy - h / 2 < this.y && this.y < dy + h / 2);
+                } break;
+                case "start":
+                default: {
+                    return (dx < this.x && this.x < dx + w) && (dy < this.y && this.y < dy + h);
+                } break;
+            }
+        }
     }
+
     const props = {
         canvas: {
             size: 100,
@@ -108,6 +119,7 @@ export const init = async (config: configT): Promise<CoreT> => {
         ctx,
         Images,
         Audios,
+        Fonts,
         inputKeys,
         inputMouse,
         props,

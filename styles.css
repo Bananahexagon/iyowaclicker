@@ -16,7 +16,9 @@ canvas {
     position: absolute;
     margin: auto;
     background-color: #000;
+    /*background-color: #b88e98;*/
     background-color: #f8ced8;
+
     inset: 0;
     image-rendering: pixelated;
 }

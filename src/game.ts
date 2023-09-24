@@ -34,6 +34,7 @@ export const main = async () => {
         iyowa: 0,
         ipc: 1,
         ips: 0,
+        shop_tab: "girls",
     }
     window.addEventListener("mousedown", (e) => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
@@ -56,13 +57,21 @@ export const main = async () => {
                 e.stamp();
             }
         }
-        Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 50, 30, "white", "serif", "center");
-        Game.cLib.drawText(`${API.ipc} ipc`, 160, 75, 20, "white", "serif", "center");
-        Game.cLib.drawText(`${API.ips} ips`, 160, 100, 20, "white", "serif", "center");
-        Game.cLib.drawText(`Shop`, 480, 80, 50, "white", "serif", "center");
-        Game.cLib.drawRect(400, 135, 150, 30, "white", 0, "center");
-        Game.cLib.drawRect(560, 135, 150, 30, "white", 0, "center");
-        Game.cLib.drawText(`igusuri`, 400, 140, 20, "black", "serif", "center");
-        Game.cLib.drawText(`girls`, 560, 140, 20, "black", "serif", "center");
+        if (Game.inputMouse.clicking) {
+            if (Game.inputMouse.is_in_rect(400, 345, 150, 30, "center")) {
+                API.shop_tab = "igusuri";
+            } else if (Game.inputMouse.is_in_rect(560, 345, 150, 30, "center")) {
+                API.shop_tab = "girls";
+            }
+        }
+        Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 430, 30, "white", "serif", "center");
+        Game.cLib.drawText(`${API.ipc} ipc`, 160, 405, 20, "white", "serif", "center");
+        Game.cLib.drawText(`${API.ips} ips`, 160, 380, 20, "white", "serif", "center");
+        Game.cLib.drawRect(320, 0, 320, 480, "#b88e98", 0, "start");
+        Game.cLib.drawRect(400, 345, 150, 30, API.shop_tab == "igusuri" ? "#eee" : "#fff", 0, "center++");
+        Game.cLib.drawRect(560, 345, 150, 30, API.shop_tab == "girls" ? "#eee" : "#fff", 0, "center++");
+        Game.cLib.drawText("Shop", 480, 400, 50, "white", "serif", "center");
+        Game.cLib.drawText("igusuri", 400, 340, 20, "black", "serif", "center");
+        Game.cLib.drawText("girls", 560, 340, 20, "black", "serif", "center");
     })
 };
