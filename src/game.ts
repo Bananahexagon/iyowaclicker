@@ -28,6 +28,15 @@ export const main = async () => {
             this.age += 1;
         }
     }
+    class IgusuriPanel {
+        name: string;
+        image: string;
+        constructor(name: string, image: string) {
+            this.name = name;
+            this.image = image;
+        }
+    }
+
     const iyowa = new Game.Sprite(160, 240, 0, 100, "iyowa", true);
     const small_iyowas: Dict<SmallIyowa> = {};
     let API = {
@@ -35,6 +44,7 @@ export const main = async () => {
         ipc: 1,
         ips: 0,
         shop_tab: "girls",
+        igusuri_s: [new IgusuriPanel("くろうばあないと", "igusuri_kn")],
     }
     window.addEventListener("mousedown", (e) => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
@@ -73,5 +83,20 @@ export const main = async () => {
         Game.cLib.drawText("Shop", 480, 400, 50, "white", "serif", "center");
         Game.cLib.drawText("igusuri", 400, 340, 20, "black", "serif", "center");
         Game.cLib.drawText("girls", 560, 340, 20, "black", "serif", "center");
+        switch (API.shop_tab) {
+            case "igusuri": {
+                Game.cLib.drawRect(320, 0, 320, 330, "#a87e88", 0, "start");
+                for (let i = 0; i < API.igusuri_s.length; i++) {
+                    const igusuri = API.igusuri_s[i];
+                    if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center")) {
+                        Game.cLib.drawRect(480, 290 - i * 60, 300, 60, "#c89ea8", 0, "center++")
+                    } else {
+                        Game.cLib.drawRect(480, 290 - i * 60, 300, 60, "#b88e98", 0, "center++")
+                    };
+                    Game.cLib.stamp(igusuri.image, 360, 290 - i * 60, 0, 200);
+                    Game.cLib.drawText(igusuri.name, 400, 290 - i * 60, 20, "white", "Zen Kurenaido", "start");
+                }
+            }
+        }
     })
 };

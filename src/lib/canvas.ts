@@ -1,7 +1,7 @@
 import { configT, CanvasProps, cLibT } from "./types";
 import { sin360, cos360 } from "./utils";
 
-export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, }, config: configT, props: CanvasProps): cLibT => {
+export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, },Fonts:{[keys: string]: FontFace}, config: configT, props: CanvasProps): cLibT => {
     const stamp = (name: string, dx: number, dy: number, dd: number = 0, size: number = 100, absolute = false) => {
         if (absolute) {
             const costume = Images[name];

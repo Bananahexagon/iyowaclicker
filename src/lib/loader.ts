@@ -32,16 +32,29 @@ export const loadAssets = async (): Promise<Assets> => {
                     resolve();
                 }
             } break;
-            case "font" : {
-                let font = new FontFace(e.name, e.src);
-                font.load().then(() => {
-                    
-                    Fonts[e.name] = font;
-                    resolve();
-                })
+            case "font": {
+                (async () => {
+                    const response = await fetch(e.src);
+                    const cssFontFace = await response.text();
+                    const matchUrls = await cssFontFace.match(/url\(.+?\)/g);
+                    if (!matchUrls) throw new Error("フォントが見つかりませんでした");
+                    let promises_sub: Promise<void>[] = [];
+                    matchUrls.forEach((f) => {
+                        promises_sub.push(
+                            (async () => {
+                                const font = new FontFace(e.name, f);
+                                await font.load();
+                                Fonts[e.name] = font;
+                                await document.fonts.add(font);
+                            })()
+                        )
+                    });
+                    Promise.all(promises_sub)
+                })().then(resolve)
             }
         }
     })));
     await Promise.all(promises);
+    console.log(Fonts);
     return { Images, Audios, Fonts };
 };

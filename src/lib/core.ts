@@ -37,7 +37,7 @@ export const init = async (config: configT): Promise<CoreT> => {
             d: 0,
         },
     };
-    const cLib: cLibT = CanvasLibGen(canvas, ctx, Images, config, props.canvas);
+    const cLib: cLibT = CanvasLibGen(canvas, ctx, Images,Fonts, config, props.canvas);
     const Sprite = SpriteLibGen(cLib);
 
     ctx.imageSmoothingEnabled = false;
