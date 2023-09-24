@@ -1,10 +1,9 @@
 import { Dict, Opt } from "./utils"
 type cLibT = {
     stamp: (name: string, dx: number, dy: number, dd?: number, size?: number, absolute?: boolean) => void;
-    drawRect: (dx: number, dy: number, width: number, height: number, color: string, direction?: number, type?: 0 | 1) => void;
+    drawRect: (dx: number, dy: number, width: number, height: number, color: string, direction?: number, type?: string) => void;
     drawLine: (lx: number, ly: number, d: number, len: number, width: number, color: string, type?: number) => void;
     drawText: (tx: string, lx: number, ly: number, size: number, color: string, font?: string, align?: "left" | "right" | "center" | "start" | "end") => void;
-
 }
 
 type configT = {

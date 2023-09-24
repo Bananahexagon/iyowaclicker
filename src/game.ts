@@ -33,6 +33,7 @@ export const main = async () => {
     let API = {
         iyowa: 0,
         ipc: 1,
+        ips: 0,
     }
     window.addEventListener("mousedown", (e) => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
@@ -55,6 +56,13 @@ export const main = async () => {
                 e.stamp();
             }
         }
-        Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 50, 40, "white", "serif", "center");
+        Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 50, 30, "white", "serif", "center");
+        Game.cLib.drawText(`${API.ipc} ipc`, 160, 75, 20, "white", "serif", "center");
+        Game.cLib.drawText(`${API.ips} ips`, 160, 100, 20, "white", "serif", "center");
+        Game.cLib.drawText(`Shop`, 480, 80, 50, "white", "serif", "center");
+        Game.cLib.drawRect(400, 135, 150, 30, "white", 0, "center");
+        Game.cLib.drawRect(560, 135, 150, 30, "white", 0, "center");
+        Game.cLib.drawText(`igusuri`, 400, 140, 20, "black", "serif", "center");
+        Game.cLib.drawText(`girls`, 560, 140, 20, "black", "serif", "center");
     })
 };
