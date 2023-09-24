@@ -45,9 +45,10 @@ export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
         ctx.lineWidth = width * config.display_quality;
         ctx.stroke();
     }
-    const drawText = (tx: string, lx: number, ly: number, size: number, color: string) => {
+    const drawText = (tx: string, lx: number, ly: number, size: number, color: string, font: string = "serif", align: "left" | "right" | "center" | "start" | "end" = "left") => {
         let [x, y] = [lx * config.display_quality, ly * config.display_quality];
-        ctx.font = `${size}px`;
+        ctx.font = `${size * config.display_quality}px ${font}`;
+        ctx.textAlign = align;
         ctx.fillStyle = color;
         ctx.fillText(tx, x, y);
     }

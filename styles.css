@@ -11,7 +11,7 @@ body {
 }
 
 canvas {
-    width: 320px;
+    width: 640px;
     height: 480px;
     position: absolute;
     margin: auto;

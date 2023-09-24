@@ -38,6 +38,7 @@ export const main = async () => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
             small_iyowas[timer] = new SmallIyowa(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
             iyowa.size += 30;
+            API.iyowa += API.ipc;
         }
     })
     Game.loop(() => {
@@ -54,6 +55,6 @@ export const main = async () => {
                 e.stamp();
             }
         }
-        Game.cLib.drawText(`${API.iyowa} iyowa`, 50, 50, 20)
+        Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 50, 40, "white", "serif", "center");
     })
 };
