@@ -1,19 +1,25 @@
 import { Dict, Opt } from "./utils"
+type bool = boolean;
+
 type cLibT = {
-    drawRect: (dx: number, dy: number, width: number, height: number, color: string, direction?: number, type?: 0 | 1) => void;
+    stamp: (name: string, dx: number, dy: number, dd?: number, size?: number, absolute?: boolean) => void;
+    drawRect: (dx: number, dy: number, width: number, height: number, color: string, direction?: number, type?: string) => void;
     drawLine: (lx: number, ly: number, d: number, len: number, width: number, color: string, type?: number) => void;
-    [keys: string]: Function;
+    drawText: (tx: string, lx: number, ly: number, size: number, color: string, font?: string, align?: "left" | "right" | "center" | "start" | "end") => void;
 }
 
 type configT = {
     display_quality: number,
+    stage_width: number,
+    stage_height: number,
     display_width: number,
     display_height: number,
     canvas_name: string,
 }
 type Assets = {
-    Images: { [keys: string]: HTMLImageElement, },
-    Audios: { [keys: string]: HTMLAudioElement, },
+    Images: Dict<HTMLImageElement>
+    Audios: Dict<HTMLAudioElement>,
+    Fonts: Dict<FontFace>,
 }
 type CanvasProps = {
     x: number,
@@ -27,10 +33,11 @@ type CoreT = {
     ctx: CanvasRenderingContext2D,
     Images: Dict<HTMLImageElement>,
     Audios: Dict<HTMLAudioElement>,
+    Fonts: Dict<FontFace>,
     inputKeys: {
         up: boolean, down: boolean, left: boolean, right: boolean, z: boolean, x: boolean, c: boolean,
     };
-    inputMouse: { x: number, y: number, clicking: boolean },
+    inputMouse: { x: number, y: number, clicking: boolean, is_in_rect: (dx: number, dy: number, w: number, h: number, type?: string) => boolean },
     props: Dict<any>,
     cLib: cLibT,
     Sprite: SpriteClassT,
@@ -66,5 +73,6 @@ export {
     Assets,
     CanvasProps,
     SpriteClassT,
-    SpriteT
+    SpriteT,
+    bool
 }

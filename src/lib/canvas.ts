@@ -1,7 +1,7 @@
-import { configT, CanvasProps } from "./types";
+import { configT, CanvasProps, cLibT } from "./types";
 import { sin360, cos360 } from "./utils";
 
-export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, }, config: configT, props: CanvasProps) => {
+export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, },Fonts:{[keys: string]: FontFace}, config: configT, props: CanvasProps): cLibT => {
     const stamp = (name: string, dx: number, dy: number, dd: number = 0, size: number = 100, absolute = false) => {
         if (absolute) {
             const costume = Images[name];
@@ -19,12 +19,30 @@ export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
             stamp(name, x, y, d, size * props.size / 100, true);
         }
     };
-    const drawRect = (dx: number, dy: number, width: number, height: number, color: string, direction: number = 0, type: 0 | 1 = 1) => {
+    const drawRect = (dx: number, dy: number, width: number, height: number, color: string, direction: number = 0, type: string = "center") => {
+
         ctx.save();
-        ctx.translate((dx + width * type / 2) * config.display_quality, (dy + height * type / 2) * config.display_quality);
-        ctx.rotate(direction * Math.PI / 180);
-        ctx.beginPath();
-        ctx.rect((-width * type / 2) * config.display_quality, (-height * type / 2) * config.display_quality, (width) * config.display_quality, (height) * config.display_quality);
+        switch (type) {
+            case "center++": {
+                ctx.translate(dx * config.display_quality, -dy * config.display_quality + canvas.height);
+                ctx.rotate(direction * Math.PI / 180);
+                ctx.beginPath();
+                ctx.rect((-width / 2) * config.display_quality, (-height / 2) * config.display_quality, (width) * config.display_quality, (height) * config.display_quality);
+            } break;
+            case "center": {
+                ctx.translate((dx - width / 2) * config.display_quality, -(dy - height / 2) * config.display_quality + canvas.height);
+                ctx.rotate(direction * Math.PI / 180);
+                ctx.beginPath();
+                ctx.rect(0, 0, (width) * config.display_quality, -(height) * config.display_quality);
+            } break;
+            case "start":
+            default: {
+                ctx.translate(dx * config.display_quality, -dy * config.display_quality + canvas.height);
+                ctx.rotate(direction * Math.PI / 180);
+                ctx.beginPath();
+                ctx.rect(0, 0, (width) * config.display_quality, -(height) * config.display_quality);
+            } break;
+        }
         ctx.fillStyle = color;
         ctx.fill();
         ctx.restore();
@@ -33,21 +51,29 @@ export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
         ctx.beginPath();
         switch (type) {
             case 0: {
-                ctx.moveTo((lx - len * Math.sin(d) / 2) * config.display_quality, (ly + len * Math.cos(d) / 2) * config.display_quality);
-                ctx.lineTo((lx + len * Math.sin(d) / 2) * config.display_quality, (ly - len * Math.cos(d) / 2) * config.display_quality);
+                ctx.moveTo((lx - len * Math.sin(d) / 2) * config.display_quality, -(ly + len * Math.cos(d) / 2) * config.display_quality + canvas.height);
+                ctx.lineTo((lx + len * Math.sin(d) / 2) * config.display_quality, -(ly - len * Math.cos(d) / 2) * config.display_quality + canvas.height);
             } break;
             case 1: {
-                ctx.moveTo(lx * config.display_quality, ly * config.display_quality);
-                ctx.lineTo((lx + len * Math.sin(d)) * config.display_quality, (ly - len * Math.cos(d)) * config.display_quality);
+                ctx.moveTo(lx * config.display_quality, -ly * config.display_quality + canvas.height);
+                ctx.lineTo((lx + len * Math.sin(d)) * config.display_quality, -(ly - len * Math.cos(d)) * config.display_quality + canvas.height);
             } break;
         }
         ctx.strokeStyle = color;
         ctx.lineWidth = width * config.display_quality;
         ctx.stroke();
     }
+    const drawText = (tx: string, lx: number, ly: number, size: number, color: string, font: string = "serif", align: "left" | "right" | "center" | "start" | "end" = "left") => {
+        let [x, y] = [lx * config.display_quality, -ly * config.display_quality + canvas.height];
+        ctx.font = `${size * config.display_quality}px ${font}`;
+        ctx.textAlign = align;
+        ctx.fillStyle = color;
+        ctx.fillText(tx, x, y);
+    }
     return {
         stamp,
         drawRect,
         drawLine,
+        drawText,
     }
 }
