@@ -108,9 +108,9 @@ export const main = async () => {
                 e.stamp();
             }
         }
-        Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 430, 30, "white", "serif", "center");
-        Game.cLib.drawText(`${API.ipc} ipc`, 160, 405, 20, "white", "serif", "center");
-        Game.cLib.drawText(`${API.ips} ips`, 160, 380, 20, "white", "serif", "center");
+        Game.cLib.drawText(`${API.iyowa.toLocaleString()} iyowa`, 160, 430, 30, "white", "serif", "center");
+        Game.cLib.drawText(`${API.ipc.toLocaleString()} ipc`, 160, 405, 20, "white", "serif", "center");
+        Game.cLib.drawText(`${API.ips.toLocaleString()} ips`, 160, 380, 20, "white", "serif", "center");
         Game.cLib.drawRect(320, 0, 480, 480, "#b88e98", 0, "start");
         Game.cLib.drawRect(400, 345, 160, 30, API.shop_tab == "igusuri" ? "#eee" : "#fff", 0, "center++");
         Game.cLib.drawRect(560, 345, 160, 30, API.shop_tab == "girls" ? "#eee" : "#fff", 0, "center++");
@@ -131,7 +131,7 @@ export const main = async () => {
                     };
                     Game.cLib.stamp(igusuri.image, 360, 290 - i * 60, 0, 200);
                     Game.cLib.drawText(igusuri.name, 400, 295 - i * 60, 20, "white", "Zen Kurenaido", "start");
-                    Game.cLib.drawText(`Lv: ${igusuri.level} | price: ${igusuri.price} iyowa`, 400, 270 - i * 60, 15, "white", "Serif", "start");
+                    Game.cLib.drawText(`Lv: ${igusuri.level.toLocaleString()} | price: ${igusuri.price.toLocaleString()} iyowa`, 400, 270 - i * 60, 15, "white", "Serif", "start");
                 }
             }
         }
