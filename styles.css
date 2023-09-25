@@ -17,8 +17,7 @@ canvas {
     position: absolute;
     margin: auto;
     background-color: #f8ced8;
-
     inset: 0;
     image-rendering: pixelated;
-    border-radius: 10px;
+    border-radius: 15px;
 }

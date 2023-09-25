@@ -57,7 +57,7 @@ export const main = async () => {
         iyowa: 0,
         ipc: 1,
         ips: 0,
-        shop_tab: "girls",
+        shop_tab: "igusuri",
         igusuri_s: [
             new IgusuriPanel("きゅうくらりん", "igusuri_kk", 10, 1.3, 1.25),
             new IgusuriPanel("あだぽしゃ", "igusuri_ap", 10, 1.3, 1.25),
@@ -71,10 +71,12 @@ export const main = async () => {
             iyowa.size += 30;
             API.iyowa += API.ipc;
         } else if (Game.inputMouse.clicking) {
-            if (Game.inputMouse.is_in_rect(400, 345, 150, 30, "center")) {
+            if (Game.inputMouse.is_in_rect(400, 345, 160, 30, "center")) {
                 API.shop_tab = "igusuri";
-            } else if (Game.inputMouse.is_in_rect(560, 345, 150, 30, "center")) {
+            } else if (Game.inputMouse.is_in_rect(560, 345, 160, 30, "center")) {
                 API.shop_tab = "girls";
+            } else if (Game.inputMouse.is_in_rect(720, 345, 160, 30, "center")) {
+                API.shop_tab = "gacha";
             } else {
                 for (let i = 0; i < API.igusuri_s.length; i++) {
                     const igusuri = API.igusuri_s[i];
@@ -106,25 +108,26 @@ export const main = async () => {
                 e.stamp();
             }
         }
-
         Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 430, 30, "white", "serif", "center");
         Game.cLib.drawText(`${API.ipc} ipc`, 160, 405, 20, "white", "serif", "center");
         Game.cLib.drawText(`${API.ips} ips`, 160, 380, 20, "white", "serif", "center");
-        Game.cLib.drawRect(320, 0, 320, 480, "#b88e98", 0, "start");
-        Game.cLib.drawRect(400, 345, 150, 30, API.shop_tab == "igusuri" ? "#eee" : "#fff", 0, "center++");
-        Game.cLib.drawRect(560, 345, 150, 30, API.shop_tab == "girls" ? "#eee" : "#fff", 0, "center++");
-        Game.cLib.drawText("Shop", 480, 400, 50, "white", "serif", "center");
+        Game.cLib.drawRect(320, 0, 480, 480, "#b88e98", 0, "start");
+        Game.cLib.drawRect(400, 345, 160, 30, API.shop_tab == "igusuri" ? "#eee" : "#fff", 0, "center++");
+        Game.cLib.drawRect(560, 345, 160, 30, API.shop_tab == "girls" ? "#eee" : "#fff", 0, "center++");
+        Game.cLib.drawRect(720, 345, 160, 30, API.shop_tab == "gacha" ? "#eee" : "#fff", 0, "center++");
+        Game.cLib.drawText("Shop", 560, 400, 50, "white", "serif", "center");
         Game.cLib.drawText("igusuri", 400, 340, 20, "black", "serif", "center");
         Game.cLib.drawText("girls", 560, 340, 20, "black", "serif", "center");
+        Game.cLib.drawText("gacha", 720, 340, 20, "black", "serif", "center");
         switch (API.shop_tab) {
             case "igusuri": {
-                Game.cLib.drawRect(320, 0, 320, 330, "#a87e88", 0, "start");
+                Game.cLib.drawRect(320, 0, 480, 330, "#a87e88", 0, "start");
                 for (let i = 0; i < API.igusuri_s.length; i++) {
                     const igusuri = API.igusuri_s[i];
-                    if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center")) {
-                        Game.cLib.drawRect(480, 290 - i * 60, 300, 60, "#c89ea8", 0, "center++")
+                    if (Game.inputMouse.is_in_rect(560, 290 - i * 60, 440, 60, "center")) {
+                        Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#c89ea8", 0, "center++")
                     } else {
-                        Game.cLib.drawRect(480, 290 - i * 60, 300, 60, "#b88e98", 0, "center++")
+                        Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#b88e98", 0, "center++")
                     };
                     Game.cLib.stamp(igusuri.image, 360, 290 - i * 60, 0, 200);
                     Game.cLib.drawText(igusuri.name, 400, 295 - i * 60, 20, "white", "Zen Kurenaido", "start");
