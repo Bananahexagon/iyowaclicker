@@ -31,9 +31,23 @@ export const main = async () => {
     class IgusuriPanel {
         name: string;
         image: string;
-        constructor(name: string, image: string) {
+        price: number;
+        price_real: number;
+        perf: number;
+        perf_real: number
+        price_ratio: number;
+        perf_ratio: number;
+        level: number;
+        constructor(name: string, image: string, price: number, price_ratio: number, perf_ratio: number) {
             this.name = name;
             this.image = image;
+            this.price = price;
+            this.price_real = price;
+            this.perf = 1;
+            this.perf_real = 1;
+            this.price_ratio = price_ratio;
+            this.perf_ratio = perf_ratio;
+            this.level = 1;
         }
     }
 
@@ -44,13 +58,38 @@ export const main = async () => {
         ipc: 1,
         ips: 0,
         shop_tab: "girls",
-        igusuri_s: [new IgusuriPanel("くろうばあないと", "igusuri_kn")],
+        igusuri_s: [
+            new IgusuriPanel("きゅうくらりん", "igusuri_kk", 10, 1.3, 1.25),
+            new IgusuriPanel("あだぽしゃ", "igusuri_ap", 10, 1.3, 1.25),
+            new IgusuriPanel("1000年生きてる", "igusuri_lm", 10, 1.3, 1.25),
+            new IgusuriPanel("くろうばあないと", "igusuri_kn", 10, 1.3, 1.25),
+        ],
     }
     window.addEventListener("mousedown", (e) => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
             small_iyowas[timer] = new SmallIyowa(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
             iyowa.size += 30;
             API.iyowa += API.ipc;
+        } else if (Game.inputMouse.clicking) {
+            if (Game.inputMouse.is_in_rect(400, 345, 150, 30, "center")) {
+                API.shop_tab = "igusuri";
+            } else if (Game.inputMouse.is_in_rect(560, 345, 150, 30, "center")) {
+                API.shop_tab = "girls";
+            } else {
+                for (let i = 0; i < API.igusuri_s.length; i++) {
+                    const igusuri = API.igusuri_s[i];
+                    if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && igusuri.price <= API.iyowa) {
+                        API.iyowa -= igusuri.price
+                        let b = igusuri.perf;
+                        igusuri.perf_real = igusuri.perf_real * igusuri.perf_ratio
+                        igusuri.price_real = igusuri.price_real * igusuri.price_ratio;
+                        igusuri.price = Math.floor(igusuri.price_real);
+                        igusuri.perf = Math.floor(igusuri.perf_real);
+                        API.ipc += (igusuri.perf - b);
+                        igusuri.level += 1;
+                    };
+                }
+            }
         }
     })
     Game.loop(() => {
@@ -67,13 +106,7 @@ export const main = async () => {
                 e.stamp();
             }
         }
-        if (Game.inputMouse.clicking) {
-            if (Game.inputMouse.is_in_rect(400, 345, 150, 30, "center")) {
-                API.shop_tab = "igusuri";
-            } else if (Game.inputMouse.is_in_rect(560, 345, 150, 30, "center")) {
-                API.shop_tab = "girls";
-            }
-        }
+
         Game.cLib.drawText(`${API.iyowa} iyowa`, 160, 430, 30, "white", "serif", "center");
         Game.cLib.drawText(`${API.ipc} ipc`, 160, 405, 20, "white", "serif", "center");
         Game.cLib.drawText(`${API.ips} ips`, 160, 380, 20, "white", "serif", "center");
@@ -94,7 +127,8 @@ export const main = async () => {
                         Game.cLib.drawRect(480, 290 - i * 60, 300, 60, "#b88e98", 0, "center++")
                     };
                     Game.cLib.stamp(igusuri.image, 360, 290 - i * 60, 0, 200);
-                    Game.cLib.drawText(igusuri.name, 400, 290 - i * 60, 20, "white", "Zen Kurenaido", "start");
+                    Game.cLib.drawText(igusuri.name, 400, 295 - i * 60, 20, "white", "Zen Kurenaido", "start");
+                    Game.cLib.drawText(`Lv: ${igusuri.level} | price: ${igusuri.price} iyowa`, 400, 270 - i * 60, 15, "white", "Serif", "start");
                 }
             }
         }

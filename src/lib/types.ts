@@ -10,6 +10,8 @@ type cLibT = {
 
 type configT = {
     display_quality: number,
+    stage_width: number,
+    stage_height: number,
     display_width: number,
     display_height: number,
     canvas_name: string,
