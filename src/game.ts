@@ -28,26 +28,30 @@ export const main = async () => {
             this.age += 1;
         }
     }
-    class IgusuriPanel {
-        name: string;
-        image: string;
-        price: number;
-        price_real: number;
-        perf: number;
-        perf_real: number
-        price_ratio: number;
-        perf_ratio: number;
-        level: number;
+    class Package {
+        igusuri: {
+            name: string;
+            image: string;
+            price: number;
+            price_real: number;
+            perf: number;
+            perf_real: number
+            price_ratio: number;
+            perf_ratio: number;
+            level: number;
+        }
         constructor(name: string, image: string, price: number, price_ratio: number, perf_ratio: number) {
-            this.name = name;
-            this.image = image;
-            this.price = price;
-            this.price_real = price;
-            this.perf = 1;
-            this.perf_real = 1;
-            this.price_ratio = price_ratio;
-            this.perf_ratio = perf_ratio;
-            this.level = 1;
+            this.igusuri = {
+                name: name,
+                image: image,
+                price: price,
+                price_real: price,
+                perf: 1,
+                perf_real: 1,
+                price_ratio: price_ratio,
+                perf_ratio: perf_ratio,
+                level: 1
+            };
         }
     }
 
@@ -58,11 +62,11 @@ export const main = async () => {
         ipc: 1,
         ips: 0,
         shop_tab: "igusuri",
-        igusuri_s: [
-            new IgusuriPanel("きゅうくらりん", "igusuri_kk", 10, 1.3, 1.25),
-            new IgusuriPanel("あだぽしゃ", "igusuri_ap", 10, 1.3, 1.25),
-            new IgusuriPanel("1000年生きてる", "igusuri_lm", 10, 1.3, 1.25),
-            new IgusuriPanel("くろうばあないと", "igusuri_kn", 10, 1.3, 1.25),
+        packages: [
+            new Package("きゅうくらりん", "igusuri_kk", 10, 1.3, 1.25),
+            new Package("あだぽしゃ", "igusuri_ap", 10, 1.3, 1.25),
+            new Package("1000年生きてる", "igusuri_lm", 10, 1.3, 1.25),
+            new Package("くろうばあないと", "igusuri_kn", 10, 1.3, 1.25),
         ],
     }
     window.addEventListener("mousedown", (e) => {
@@ -78,8 +82,9 @@ export const main = async () => {
             } else if (Game.inputMouse.is_in_rect(720, 345, 160, 30, "center")) {
                 API.shop_tab = "gacha";
             } else {
-                for (let i = 0; i < API.igusuri_s.length; i++) {
-                    const igusuri = API.igusuri_s[i];
+                API.ipc = 0;
+                for (let i = 0; i < API.packages.length; i++) {
+                    const igusuri = API.packages[i].igusuri;
                     if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && igusuri.price <= API.iyowa) {
                         API.iyowa -= igusuri.price
                         let b = igusuri.perf;
@@ -87,9 +92,8 @@ export const main = async () => {
                         igusuri.price_real = igusuri.price_real * igusuri.price_ratio;
                         igusuri.price = Math.floor(igusuri.price_real);
                         igusuri.perf = Math.floor(igusuri.perf_real);
-                        API.ipc += (igusuri.perf - b);
-                        igusuri.level += 1;
                     };
+                    API.ipc += igusuri.perf;
                 }
             }
         }
@@ -122,8 +126,8 @@ export const main = async () => {
         switch (API.shop_tab) {
             case "igusuri": {
                 Game.cLib.drawRect(320, 0, 480, 330, "#a87e88", 0, "start");
-                for (let i = 0; i < API.igusuri_s.length; i++) {
-                    const igusuri = API.igusuri_s[i];
+                for (let i = 0; i < API.packages.length; i++) {
+                    const igusuri = API.packages[i].igusuri;
                     if (Game.inputMouse.is_in_rect(560, 290 - i * 60, 440, 60, "center")) {
                         Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#c89ea8", 0, "center++")
                     } else {
