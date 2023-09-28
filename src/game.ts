@@ -1,5 +1,5 @@
 import { init } from "./lib/core";
-import { CoreT, SpriteT } from "./lib/types";
+import { CoreT, SpriteT, bool } from "./lib/types";
 import { Dict, Opt, sin360, distance } from "./lib/utils";
 import config from "./config.json";
 
@@ -57,7 +57,7 @@ export const main = async () => {
 
     const iyowa = new Game.Sprite(160, 240, 0, 100, "iyowa", true);
     const small_iyowas: Dict<SmallIyowa> = {};
-    let API = {
+    const API = {
         iyowa: 0,
         ipc: 1,
         ips: 0,
@@ -68,7 +68,33 @@ export const main = async () => {
             new Package("1000年生きてる", "igusuri_lm", 10, 1.3, 1.25),
             new Package("くろうばあないと", "igusuri_kn", 10, 1.3, 1.25),
         ],
-    }
+    };
+    const Achieve = (() => {
+        type objT = { name: string, explain: string, age: number, life: number };
+        const dict: Dict<objT> = {};
+        const render_queue: objT[] = [];
+        const unlock = (name: string, explain: string) => {
+            const obj: objT = {
+                name: name,
+                explain: explain,
+                age: 0,
+                life: 300,
+            }
+            dict[name] = obj;
+            render_queue.push(obj);
+        };
+        const check = () => {
+            if (148 <= API.iyowa) {
+                unlock("胃が弱いからいよわです", "解放条件:148いよわ生産する");
+            }
+        };
+        return {
+            dict,
+            render_queue,
+            check,
+            unlock,
+        }
+    })();
     window.addEventListener("mousedown", (e) => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
             small_iyowas[timer] = new SmallIyowa(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
@@ -99,11 +125,13 @@ export const main = async () => {
         }
     })
     Game.loop(() => {
-        Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height)
-        iyowa.d = sin360(timer * 2) * 5;
-        iyowa.size = Math.max(75, 40 + iyowa.size * 0.6)
-        iyowa.stamp();
         timer++;
+        iyowa.d = sin360(timer * 2) * 5;
+        iyowa.size = Math.max(75, 40 + iyowa.size * 0.6);
+        iyowa.stamp();
+        Achieve.check();
+        //ここから下は描画
+        Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height)
         for (const i in small_iyowas) {
             const e = small_iyowas[i];
             if (!(e.age < e.life)) delete small_iyowas[i];
@@ -138,6 +166,9 @@ export const main = async () => {
                     Game.cLib.drawText(`Lv: ${igusuri.level.toLocaleString()} | price: ${igusuri.price.toLocaleString()} iyowa`, 400, 270 - i * 60, 15, "white", "Serif", "start");
                 }
             }
+        }
+        for(let i = 0; i < Math.min(3, Achieve.render_queue.length); i++) {
+
         }
     })
 };
