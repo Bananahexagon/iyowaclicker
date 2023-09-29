@@ -46,7 +46,7 @@ export const main = async () => {
                 image: image,
                 price: price,
                 price_real: price,
-                perf: 1,
+                perf: 0,
                 perf_real: 1,
                 price_ratio: price_ratio,
                 perf_ratio: perf_ratio,
@@ -70,22 +70,40 @@ export const main = async () => {
         ],
     };
     const Achieve = (() => {
-        type objT = { name: string, explain: string, age: number, life: number };
+        type objT = { title: string, explain: string, age: number, life: number };
         const dict: Dict<objT> = {};
         const render_queue: objT[] = [];
-        const unlock = (name: string, explain: string) => {
-            const obj: objT = {
-                name: name,
-                explain: explain,
-                age: 0,
-                life: 300,
+        const unlock = (id: string, name: string, explain: string) => {
+            if (dict[id] === undefined) {
+                const obj: objT = {
+                    title: name,
+                    explain: explain,
+                    age: 0,
+                    life: 600,
+                }
+                dict[id] = obj;
+                render_queue.push(obj);
+                console.log(`実績"${name}"を解除しました。`);
             }
-            dict[name] = obj;
-            render_queue.push(obj);
         };
         const check = () => {
+            // if (1 <= API.iyowa) {
+            //     unlock("test_1", "テスト実績1", "テスト実績1の説明文");
+            // }
+            // if (2 <= API.iyowa) {
+            //     unlock("test_2", "テスト実績2", "テスト実績2の説明文");
+            // }
+            // if (3 <= API.iyowa) {
+            //     unlock("test_3", "テスト実績3", "テスト実績3の説明文");
+            // }
+            // if (4 <= API.iyowa) {
+            //     unlock("test_4", "テスト実績4", "テスト実績4の説明文");
+            // }
+            // if (5 <= API.iyowa) {
+            //     unlock("test_5", "テスト実績5", "テスト実績5の説明文");
+            // }
             if (148 <= API.iyowa) {
-                unlock("胃が弱いからいよわです", "解放条件:148いよわ生産する");
+                unlock("iyowa_1", "胃が弱いからいよわです", "解放条件:148いよわ生産する");
             }
         };
         return {
@@ -108,7 +126,7 @@ export const main = async () => {
             } else if (Game.inputMouse.is_in_rect(720, 345, 160, 30, "center")) {
                 API.shop_tab = "gacha";
             } else {
-                API.ipc = 0;
+                API.ipc = 1;
                 for (let i = 0; i < API.packages.length; i++) {
                     const igusuri = API.packages[i].igusuri;
                     if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && igusuri.price <= API.iyowa) {
@@ -117,7 +135,7 @@ export const main = async () => {
                         igusuri.perf_real = igusuri.perf_real * igusuri.perf_ratio
                         igusuri.price_real = igusuri.price_real * igusuri.price_ratio;
                         igusuri.price = Math.floor(igusuri.price_real);
-                        igusuri.perf = Math.floor(igusuri.perf_real);
+                        igusuri.perf = Math.floor(igusuri.perf_real) - 1;
                     };
                     API.ipc += igusuri.perf;
                 }
@@ -128,10 +146,11 @@ export const main = async () => {
         timer++;
         iyowa.d = sin360(timer * 2) * 5;
         iyowa.size = Math.max(75, 40 + iyowa.size * 0.6);
-        iyowa.stamp();
         Achieve.check();
+        if (Game.inputKeys.d) API.ipc += 100;
         //ここから下は描画
-        Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height)
+        Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
+        iyowa.stamp();
         for (const i in small_iyowas) {
             const e = small_iyowas[i];
             if (!(e.age < e.life)) delete small_iyowas[i];
@@ -167,8 +186,22 @@ export const main = async () => {
                 }
             }
         }
-        for(let i = 0; i < Math.min(3, Achieve.render_queue.length); i++) {
-
+        for (let i = 0; i < Math.min(3, Achieve.render_queue.length); i++) {
+            const achieve = Achieve.render_queue[i];
+            achieve.age += 1;
+            if (achieve.life < achieve.age) {
+                Achieve.render_queue.shift();
+                i -= 1;
+                continue;
+            };
+            let alpha = ((age, life) => {
+                if (age < 10) return age / 10
+                else if (life - 10 < age) return (life - age) / 10
+                else return 1
+            })(achieve.age, achieve.life);
+            Game.cLib.stamp("achieve_box", 160, 90 + i * 120, 0, 65, alpha, "center");
+            Game.cLib.drawText(achieve.title, 160, 110 + i * 120, 20, "black", "Zen Kurenaido", "center");
+            Game.cLib.drawText(`${achieve.explain}`, 25, 85 + i * 120, 15, "black", "Zen Kurenaido", "start");
         }
     })
 };

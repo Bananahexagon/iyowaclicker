@@ -13,7 +13,7 @@ export const init = async (config: configT): Promise<CoreT> => {
     const ctx = canvas.getContext("2d")!;
     const { Images, Audios, Fonts } = await loadAssets();
     const inputKeys = {
-        up: false, down: false, left: false, right: false, z: false, x: false, c: false,
+        up: false, down: false, left: false, right: false, z: false, x: false, c: false, d: false,
     };
     const inputMouse = {
         x: 0, y: 0, clicking: false, is_in_rect(dx: number, dy: number, w: number, h: number, type: string = "center") {
@@ -37,63 +37,73 @@ export const init = async (config: configT): Promise<CoreT> => {
             d: 0,
         },
     };
-    const cLib: cLibT = CanvasLibGen(canvas, ctx, Images,Fonts, config, props.canvas);
+    const cLib: cLibT = CanvasLibGen(canvas, ctx, Images, Fonts, config, props.canvas);
     const Sprite = SpriteLibGen(cLib);
 
     ctx.imageSmoothingEnabled = false;
     const pLib = PositionLibGen(canvas, config, props.canvas);
     window.addEventListener("keydown", e => {
         switch (e.key) {
-            case "ArrowUp":
+            case "ArrowUp": {
                 inputKeys.up = true;
-                break;
-            case "ArrowDown":
+            } break;
+            case "ArrowDown": {
                 inputKeys.down = true;
-                break;
-            case "ArrowLeft":
+            } break;
+            case "ArrowLeft": {
                 inputKeys.left = true;
-                break;
-            case "ArrowRight":
+            } break;
+            case "ArrowRight": {
                 inputKeys.right = true;
-                break;
+            } break;
             case "z":
-            case "Z":
+            case "Z": {
                 inputKeys.z = true;
-                break;
+            } break;
             case "x":
-            case "X":
+            case "X": {
                 inputKeys.x = true;
-                break;
+            } break;
             case "c":
-            case "C":
+            case "C": {
                 inputKeys.c = true;
+            } break;
+            case "d":
+            case "D": {
+                inputKeys.d = true;
+            } break;
         }
     });
     window.addEventListener("keyup", e => {
         switch (e.key) {
-            case "ArrowUp":
+            case "ArrowUp": {
                 inputKeys.up = false;
-                break;
-            case "ArrowDown":
+            } break;
+            case "ArrowDown": {
                 inputKeys.down = false;
-                break;
-            case "ArrowLeft":
+            } break;
+            case "ArrowLeft": {
                 inputKeys.left = false;
-                break;
-            case "ArrowRight":
+            } break;
+            case "ArrowRight": {
                 inputKeys.right = false;
-                break;
+            } break;
             case "z":
-            case "Z":
+            case "Z": {
                 inputKeys.z = false;
-                break;
+            } break;
             case "x":
-            case "X":
+            case "X": {
                 inputKeys.x = false;
-                break;
+            } break;
             case "c":
-            case "C":
+            case "C": {
                 inputKeys.c = false;
+            } break;
+            case "d":
+            case "D": {
+                inputKeys.d = false;
+            } break;
         }
     });
     canvas.addEventListener("mousedown", e => {

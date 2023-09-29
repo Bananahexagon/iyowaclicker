@@ -1,26 +1,37 @@
 import { configT, CanvasProps, cLibT } from "./types";
 import { sin360, cos360 } from "./utils";
 
-export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, },Fonts:{[keys: string]: FontFace}, config: configT, props: CanvasProps): cLibT => {
-    const stamp = (name: string, dx: number, dy: number, dd: number = 0, size: number = 100, absolute = false) => {
+export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, Images: { [keys: string]: HTMLImageElement, }, Fonts: { [keys: string]: FontFace }, config: configT, props: CanvasProps): cLibT => {
+    const stamp = (name: string, dx: number, dy: number, dd: number = 0, size: number = 100,alpha:number = 1, align: string = "center", absolute = false) => {
         if (absolute) {
             const costume = Images[name];
             const sw = costume.width;
             const sh = costume.height;
-            ctx.save();
-            ctx.translate(dx * config.display_quality, -dy * config.display_quality + canvas.height);
-            ctx.rotate(dd * Math.PI / 180);
-            ctx.drawImage(costume, (-sw * size / 200) * config.display_quality, (-sh * size / 200) * config.display_quality, (sw * size / 100) * config.display_quality, (sh * size / 100) * config.display_quality);
-            ctx.restore();
+            ctx.globalAlpha = alpha;
+            switch (align) {
+                case "center": {
+                    ctx.save();
+                    ctx.translate(dx * config.display_quality, -dy * config.display_quality + canvas.height);
+                    ctx.rotate(dd * Math.PI / 180);
+                    ctx.drawImage(costume, (-sw * size / 200) * config.display_quality, (-sh * size / 200) * config.display_quality, (sw * size / 100) * config.display_quality, (sh * size / 100) * config.display_quality);
+                    ctx.restore();
+                } break;
+                case "start": {
+                    ctx.save();
+                    ctx.translate(dx * config.display_quality, -dy * config.display_quality + canvas.height);
+                    ctx.rotate(dd * Math.PI / 180);
+                    ctx.drawImage(costume, 0, 0, (sw * size / 100) * config.display_quality, (sh * size / 100) * config.display_quality);
+                    ctx.restore();
+                }
+            }
         } else {
             const x = (cos360(props.d) * dx - sin360(props.d) * dy + props.x) * props.size / 100;
             const y = (sin360(props.d) * dx + cos360(props.d) * dy + props.y) * props.size / 100;
             const d = dd + props.d;
-            stamp(name, x, y, d, size * props.size / 100, true);
+            stamp(name, x, y, d, size * props.size / 100, alpha,align, true);
         }
     };
     const drawRect = (dx: number, dy: number, width: number, height: number, color: string, direction: number = 0, type: string = "center") => {
-
         ctx.save();
         switch (type) {
             case "center++": {
