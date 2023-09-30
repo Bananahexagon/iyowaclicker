@@ -62,7 +62,7 @@ class SpriteClass {
     }
     stamp(): void { }
     move(far: number): void { }
-};
+}
 type SpriteClassT = typeof SpriteClass;
 const Sprite = new SpriteClass(0, 0);
 type SpriteT = typeof Sprite;

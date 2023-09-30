@@ -8,16 +8,16 @@ export const loadAssets = async (): Promise<Assets> => {
         src: string,
         name: string,
     }
-    let Images: Dict<HTMLImageElement> = {};
-    let Audios: Dict<HTMLAudioElement> = {};
-    let Fonts: Dict<FontFace> = {};
+    const Images: Dict<HTMLImageElement> = {};
+    const Audios: Dict<HTMLAudioElement> = {};
+    const Fonts: Dict<FontFace> = {};
     const index: AssetData[] = json as unknown as AssetData[];
-    let promises: Promise<void>[] = [];
+    const promises: Promise<void>[] = [];
     console.log(index)
     index.forEach((e: AssetData) => promises.push(new Promise((resolve) => {
         switch (e.type) {
             case "image": {
-                let image = new Image();
+                const image = new Image();
                 image.src = e.src;
                 image.onload = () => {
                     Images[e.name] = image;
@@ -25,7 +25,7 @@ export const loadAssets = async (): Promise<Assets> => {
                 }
             } break;
             case "audio": {
-                let audio = new Audio();
+                const audio = new Audio();
                 audio.src = e.src;
                 audio.onload = () => {
                     Audios[e.name] = audio;
@@ -38,7 +38,7 @@ export const loadAssets = async (): Promise<Assets> => {
                     const cssFontFace = await response.text();
                     const matchUrls = await cssFontFace.match(/url\(.+?\)/g);
                     if (!matchUrls) throw new Error("フォントが見つかりませんでした");
-                    let promises_sub: Promise<void>[] = [];
+                    const promises_sub: Promise<void>[] = [];
                     matchUrls.forEach((f) => {
                         promises_sub.push(
                             (async () => {

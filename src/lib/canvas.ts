@@ -75,7 +75,7 @@ export const CanvasLibGen = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCont
         ctx.stroke();
     }
     const drawText = (tx: string, lx: number, ly: number, size: number, color: string, font: string = "serif", align: "left" | "right" | "center" | "start" | "end" = "left") => {
-        let [x, y] = [lx * config.display_quality, -ly * config.display_quality + canvas.height];
+        const [x, y] = [lx * config.display_quality, -ly * config.display_quality + canvas.height];
         ctx.font = `${size * config.display_quality}px ${font}`;
         ctx.textAlign = align;
         ctx.fillStyle = color;

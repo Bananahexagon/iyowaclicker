@@ -131,12 +131,12 @@ export const main = async () => {
                     const igusuri = API.packages[i].igusuri;
                     if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && igusuri.price <= API.iyowa) {
                         API.iyowa -= igusuri.price
-                        let b = igusuri.perf;
+                        const b = igusuri.perf;
                         igusuri.perf_real = igusuri.perf_real * igusuri.perf_ratio
                         igusuri.price_real = igusuri.price_real * igusuri.price_ratio;
                         igusuri.price = Math.floor(igusuri.price_real);
                         igusuri.perf = Math.floor(igusuri.perf_real) - 1;
-                    };
+                    }
                     API.ipc += igusuri.perf;
                 }
             }
@@ -179,7 +179,7 @@ export const main = async () => {
                         Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#c89ea8", 0, "center++")
                     } else {
                         Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#b88e98", 0, "center++")
-                    };
+                    }
                     Game.cLib.stamp(igusuri.image, 360, 290 - i * 60, 0, 200);
                     Game.cLib.drawText(igusuri.name, 400, 295 - i * 60, 20, "white", "Zen Kurenaido", "start");
                     Game.cLib.drawText(`Lv: ${igusuri.level.toLocaleString()} | price: ${igusuri.price.toLocaleString()} iyowa`, 400, 270 - i * 60, 15, "white", "Serif", "start");
@@ -193,8 +193,8 @@ export const main = async () => {
                 Achieve.render_queue.shift();
                 i -= 1;
                 continue;
-            };
-            let alpha = ((age, life) => {
+            }
+            const alpha = ((age, life) => {
                 if (age < 10) return age / 10
                 else if (life - 10 < age) return (life - age) / 10
                 else return 1
