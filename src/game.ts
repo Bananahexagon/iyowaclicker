@@ -1,7 +1,11 @@
 import { init } from "./lib/core";
-import { CoreT, SpriteT, bool } from "./lib/types";
+import { CoreT, SpriteT } from "./lib/types";
 import { Dict, Opt, sin360, distance } from "./lib/utils";
 import config from "./config.json";
+
+import { apiT, OpusT } from "./types";
+import { AchieveModGen } from "./achieve"
+import { OpusModGen } from "./opus"
 
 export const main = async () => {
     const Game: CoreT = await init(config);
@@ -28,91 +32,24 @@ export const main = async () => {
             this.age += 1;
         }
     }
-    class Package {
-        igusuri: {
-            name: string;
-            image: string;
-            price: number;
-            price_real: number;
-            perf: number;
-            perf_real: number
-            price_ratio: number;
-            perf_ratio: number;
-            level: number;
-        }
-        constructor(name: string, image: string, price: number, price_ratio: number, perf_ratio: number) {
-            this.igusuri = {
-                name: name,
-                image: image,
-                price: price,
-                price_real: price,
-                perf: 0,
-                perf_real: 1,
-                price_ratio: price_ratio,
-                perf_ratio: perf_ratio,
-                level: 1
-            };
-        }
-    }
-
     const iyowa = new Game.Sprite(160, 240, 0, 100, "iyowa", true);
-    const small_iyowas: Dict<SmallIyowa> = {};
+
     const API = {
         iyowa: 0,
         ipc: 1,
         ips: 0,
         shop_tab: "igusuri",
-        packages: [
-            new Package("きゅうくらりん", "igusuri_kk", 10, 1.3, 1.25),
-            new Package("あだぽしゃ", "igusuri_ap", 10, 1.3, 1.25),
-            new Package("1000年生きてる", "igusuri_lm", 10, 1.3, 1.25),
-            new Package("くろうばあないと", "igusuri_kn", 10, 1.3, 1.25),
-        ],
+        opus: [] as OpusT[]
     };
-    const Achieve = (() => {
-        type objT = { title: string, explain: string, age: number, life: number };
-        const dict: Dict<objT> = {};
-        const render_queue: objT[] = [];
-        const unlock = (id: string, name: string, explain: string) => {
-            if (dict[id] === undefined) {
-                const obj: objT = {
-                    title: name,
-                    explain: explain,
-                    age: 0,
-                    life: 600,
-                }
-                dict[id] = obj;
-                render_queue.push(obj);
-                console.log(`実績"${name}"を解除しました。`);
-            }
-        };
-        const check = () => {
-            if (1 <= API.iyowa) {
-                unlock("test_1", "テスト実績1", "テスト実績1の説明文");
-            }
-            if (2 <= API.iyowa) {
-                unlock("test_2", "テスト実績2", "テスト実績2の説明文");
-            }
-            if (3 <= API.iyowa) {
-                unlock("test_3", "テスト実績3", "テスト実績3の説明文");
-            }
-            if (4 <= API.iyowa) {
-                unlock("test_4", "テスト実績4", "テスト実績4の説明文");
-            }
-            if (5 <= API.iyowa) {
-                unlock("test_5", "テスト実績5", "テスト実績5の説明文");
-            }
-            if (148 <= API.iyowa) {
-                unlock("iyowa_1", "胃が弱いからいよわです", "解放条件:148いよわ生産する");
-            }
-        };
-        return {
-            dict,
-            render_queue,
-            check,
-            unlock,
-        }
-    })();
+    const Opus = OpusModGen(API, iyowa);
+    const Achieve = AchieveModGen(Game, API);
+    API.opus = [
+        new Opus("きゅうくらりん", "igusuri_kk", 10, 1.3, 1.25),
+        new Opus("あだぽしゃ", "igusuri_ap", 10, 1.3, 1.25),
+        new Opus("1000年生きてる", "igusuri_lm", 10, 1.3, 1.25),
+        new Opus("くろうばあないと", "igusuri_kn", 10, 1.3, 1.25),
+    ];
+    const small_iyowas: Dict<SmallIyowa> = {};
     window.addEventListener("mousedown", (e) => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
             small_iyowas[timer] = new SmallIyowa(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
@@ -127,15 +64,11 @@ export const main = async () => {
                 API.shop_tab = "gacha";
             } else {
                 API.ipc = 1;
-                for (let i = 0; i < API.packages.length; i++) {
-                    const igusuri = API.packages[i].igusuri;
+                for (let i = 0; i < API.opus.length; i++) {
+                    const opus = API.opus[i];
+                    const igusuri = API.opus[i].igusuri;
                     if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && igusuri.price <= API.iyowa) {
-                        API.iyowa -= igusuri.price
-                        const b = igusuri.perf;
-                        igusuri.perf_real = igusuri.perf_real * igusuri.perf_ratio
-                        igusuri.price_real = igusuri.price_real * igusuri.price_ratio;
-                        igusuri.price = Math.floor(igusuri.price_real);
-                        igusuri.perf = Math.floor(igusuri.perf_real) - 1;
+                        opus.buy_igusuri();
                     }
                     API.ipc += igusuri.perf;
                 }
@@ -173,8 +106,8 @@ export const main = async () => {
         switch (API.shop_tab) {
             case "igusuri": {
                 Game.cLib.drawRect(320, 0, 480, 330, "#a87e88", 0, "start");
-                for (let i = 0; i < API.packages.length; i++) {
-                    const igusuri = API.packages[i].igusuri;
+                for (let i = 0; i < API.opus.length; i++) {
+                    const igusuri = API.opus[i].igusuri;
                     if (Game.inputMouse.is_in_rect(560, 290 - i * 60, 440, 60, "center")) {
                         Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#c89ea8", 0, "center++")
                     } else {
@@ -186,22 +119,6 @@ export const main = async () => {
                 }
             }
         }
-        for (let i = 0; i < Math.min(3, Achieve.render_queue.length); i++) {
-            const achieve = Achieve.render_queue[i];
-            achieve.age += 1;
-            if (achieve.life < achieve.age) {
-                Achieve.render_queue.shift();
-                i -= 1;
-                continue;
-            }
-            const alpha = ((age, life) => {
-                if (age < 10) return age / 10
-                else if (life - 10 < age) return (life - age) / 10
-                else return 1
-            })(achieve.age, achieve.life);
-            Game.cLib.stamp("achieve_box", 160, 90 + i * 120, 0, 65, alpha, "center");
-            Game.cLib.drawText(achieve.title, 160, 110 + i * 120, 20, "black", "Zen Kurenaido", "center");
-            Game.cLib.drawText(`${achieve.explain}`, 25, 85 + i * 120, 15, "black", "Zen Kurenaido", "start");
-        }
+        Achieve.render();
     })
 };
