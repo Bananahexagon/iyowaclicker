@@ -87,21 +87,21 @@ export const main = async () => {
             }
         };
         const check = () => {
-            // if (1 <= API.iyowa) {
-            //     unlock("test_1", "テスト実績1", "テスト実績1の説明文");
-            // }
-            // if (2 <= API.iyowa) {
-            //     unlock("test_2", "テスト実績2", "テスト実績2の説明文");
-            // }
-            // if (3 <= API.iyowa) {
-            //     unlock("test_3", "テスト実績3", "テスト実績3の説明文");
-            // }
-            // if (4 <= API.iyowa) {
-            //     unlock("test_4", "テスト実績4", "テスト実績4の説明文");
-            // }
-            // if (5 <= API.iyowa) {
-            //     unlock("test_5", "テスト実績5", "テスト実績5の説明文");
-            // }
+            if (1 <= API.iyowa) {
+                unlock("test_1", "テスト実績1", "テスト実績1の説明文");
+            }
+            if (2 <= API.iyowa) {
+                unlock("test_2", "テスト実績2", "テスト実績2の説明文");
+            }
+            if (3 <= API.iyowa) {
+                unlock("test_3", "テスト実績3", "テスト実績3の説明文");
+            }
+            if (4 <= API.iyowa) {
+                unlock("test_4", "テスト実績4", "テスト実績4の説明文");
+            }
+            if (5 <= API.iyowa) {
+                unlock("test_5", "テスト実績5", "テスト実績5の説明文");
+            }
             if (148 <= API.iyowa) {
                 unlock("iyowa_1", "胃が弱いからいよわです", "解放条件:148いよわ生産する");
             }
