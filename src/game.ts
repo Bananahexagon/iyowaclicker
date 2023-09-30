@@ -36,6 +36,7 @@ export const main = async () => {
 
     const API = {
         iyowa: 0,
+        iyowa_real: 0,
         ipc: 1,
         ips: 0,
         shop_tab: "igusuri",
@@ -44,17 +45,17 @@ export const main = async () => {
     const Opus = OpusModGen(API, iyowa);
     const Achieve = AchieveModGen(Game, API);
     API.opus = [
-        new Opus("きゅうくらりん", "igusuri_kk", 10, 1.3, 1.25),
-        new Opus("あだぽしゃ", "igusuri_ap", 10, 1.3, 1.25),
-        new Opus("1000年生きてる", "igusuri_lm", 10, 1.3, 1.25),
-        new Opus("くろうばあないと", "igusuri_kn", 10, 1.3, 1.25),
+        new Opus("きゅうくらりん", "くらり", "igusuri_kk", "girls_kk", 10, 1.3, 1.25),
+        new Opus("あだぽしゃ", "アダ", "igusuri_ad", "girls_ad", 10, 1.3, 1.25),
+        new Opus("1000年生きてる", "1000年ちゃん", "igusuri_lm", "girls_lm", 10, 1.3, 1.25),
+        new Opus("くろうばあないと", "みどり", "igusuri_kn", "girls_kn", 10, 1.3, 1.25),
     ];
     const small_iyowas: Dict<SmallIyowa> = {};
     window.addEventListener("mousedown", (e) => {
         if (distance(iyowa.x, iyowa.y, Game.inputMouse.x, Game.inputMouse.y,) < 70) {
             small_iyowas[timer] = new SmallIyowa(Game.inputMouse.x, Game.inputMouse.y, 0, Math.random() * 9 - 3, Math.random() * 7 + 6, Math.random() * 10, 100);
             iyowa.size += 30;
-            API.iyowa += API.ipc;
+            API.iyowa_real += API.ipc;
         } else if (Game.inputMouse.clicking) {
             if (Game.inputMouse.is_in_rect(400, 345, 160, 30, "center")) {
                 API.shop_tab = "igusuri";
@@ -63,14 +64,31 @@ export const main = async () => {
             } else if (Game.inputMouse.is_in_rect(720, 345, 160, 30, "center")) {
                 API.shop_tab = "gacha";
             } else {
-                API.ipc = 1;
-                for (let i = 0; i < API.opus.length; i++) {
-                    const opus = API.opus[i];
-                    const igusuri = API.opus[i].igusuri;
-                    if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && igusuri.price <= API.iyowa) {
-                        opus.buy_igusuri();
-                    }
-                    API.ipc += igusuri.perf;
+                switch (API.shop_tab) {
+                    case "igusuri": {
+                        API.ipc = 1;
+                        API.ips = 0;
+                        for (let i = 0; i < API.opus.length; i++) {
+                            const opus = API.opus[i];
+                            const igusuri = opus.igusuri;
+                            if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && igusuri.price <= API.iyowa) {
+                                opus.buy_igusuri();
+                            }
+                            API.ipc += igusuri.perf;
+                            API.ips += opus.girl.perf * igusuri.perf;
+                        }
+                    } break;
+                    case "girls": {
+                        API.ips = 0;
+                        for (let i = 0; i < API.opus.length; i++) {
+                            const opus = API.opus[i];
+                            const girl = opus.girl;
+                            if (Game.inputMouse.is_in_rect(480, 290 - i * 60, 300, 60, "center") && girl.price <= API.iyowa) {
+                                opus.buy_girl();
+                            }
+                            API.ips += girl.perf * opus.igusuri.perf;
+                        }
+                    } break;
                 }
             }
         }
@@ -80,6 +98,8 @@ export const main = async () => {
         iyowa.d = sin360(timer * 2) * 5;
         iyowa.size = Math.max(75, 40 + iyowa.size * 0.6);
         Achieve.check();
+        API.iyowa_real += API.ips / 60;
+        API.iyowa = Math.floor(API.iyowa_real);
         if (Game.inputKeys.d) API.ipc += 100;
         //ここから下は描画
         Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
@@ -117,7 +137,21 @@ export const main = async () => {
                     Game.cLib.drawText(igusuri.name, 400, 295 - i * 60, 20, "white", "Zen Kurenaido", "start");
                     Game.cLib.drawText(`Lv: ${igusuri.level.toLocaleString()} | price: ${igusuri.price.toLocaleString()} iyowa`, 400, 270 - i * 60, 15, "white", "Serif", "start");
                 }
-            }
+            } break;
+            case "girls": {
+                Game.cLib.drawRect(320, 0, 480, 330, "#a87e88", 0, "start");
+                for (let i = 0; i < API.opus.length; i++) {
+                    const girl = API.opus[i].girl;
+                    if (Game.inputMouse.is_in_rect(560, 290 - i * 60, 440, 60, "center")) {
+                        Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#c89ea8", 0, "center++")
+                    } else {
+                        Game.cLib.drawRect(560, 290 - i * 60, 460, 60, "#b88e98", 0, "center++")
+                    }
+                    Game.cLib.stamp(girl.image, 360, 290 - i * 60, 0, 200);
+                    Game.cLib.drawText(girl.name, 400, 295 - i * 60, 20, "white", "Zen Kurenaido", "start");
+                    Game.cLib.drawText(`Lv: ${girl.level.toLocaleString()} | price: ${girl.price.toLocaleString()} iyowa`, 400, 270 - i * 60, 15, "white", "Serif", "start");
+                }
+            } break;
         }
         Achieve.render();
     })

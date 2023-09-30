@@ -11,8 +11,8 @@
     },
     {
         "type": "image",
-        "name": "igusuri_ap",
-        "src": "./assets/igusuri_ap.png"
+        "name": "igusuri_ad",
+        "src": "./assets/igusuri_ad.png"
     },
     {
         "type": "image",
@@ -23,6 +23,26 @@
         "type": "image",
         "name": "igusuri_lm",
         "src": "./assets/igusuri_lm.png"
+    },
+    {
+        "type": "image",
+        "name": "girls_kk",
+        "src": "./assets/girls_kk.png"
+    },
+    {
+        "type": "image",
+        "name": "girls_ad",
+        "src": "./assets/girls_ad.png"
+    },
+    {
+        "type": "image",
+        "name": "girls_kn",
+        "src": "./assets/girls_kn.png"
+    },
+    {
+        "type": "image",
+        "name": "girls_lm",
+        "src": "./assets/girls_lm.png"
     },
     {
         "type": "image",

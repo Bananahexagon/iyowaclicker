@@ -20,22 +20,41 @@ class OpusForType {
         perf_ratio: number;
         level: number;
     }
-    constructor(name: string, image: string, price: number, price_ratio: number, perf_ratio: number) {
+    girl: {
+        name: string;
+        image: string;
+        price: number;
+        perf: number;
+        price_ratio: number;
+        level: number;
+    }
+    constructor(name_i: string, name_g: string, image_i: string, image_g: string, price: number, price_ratio: number, perf_ratio: number) {
         this.igusuri = {
-            name: "",
-            image: "",
-            price: 0,
-            price_real: 0,
+            name: name_i,
+            image: image_i,
+            price: price,
+            price_real: price,
             perf: 0,
             perf_real: 1,
-            price_ratio: 0,
-            perf_ratio: 0,
+            price_ratio: price_ratio,
+            perf_ratio: perf_ratio,
             level: 1
         };
+        this.girl = {
+            name: name_g,
+            image: image_g,
+            price: price,
+            perf: 0,
+            price_ratio: 10,
+            level: 0,
+        }
     }
-    buy_igusuri() { }
+    buy_igusuri() {
+    }
+    buy_girl() {
+    }
 }
-const _ = new OpusForType("", "", 0, 0, 0);
+const _ = new OpusForType("", "", "", "", 0, 0, 0);
 type OpusT = typeof _;
 
 export {
