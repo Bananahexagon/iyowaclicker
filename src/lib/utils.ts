@@ -33,34 +33,56 @@ class Opt<T> {
     static Some<T>(arg: T) {
         return new Opt<T>(true, arg);
     }
+    static try<T>(fn: () => T) {
+        try {
+            const v = fn();
+            return Opt.Some<T>(v);
+        } catch {
+            return Opt.None<T>();
+        }
+    }
 }
 
-class Res<Ok, Err> {
+class Res<T, E> {
     is_ok: boolean;
-    value: Ok | Err | undefined;
-    constructor(is_ok: boolean, value: Ok | Err | undefined = undefined) {
+    value: T | E | undefined;
+    constructor(is_ok: boolean, value: T | E | undefined = undefined) {
         this.is_ok = is_ok;
         this.value = value;
     }
-    unwrap(): Ok {
+    unwrap(): T {
         if (this.is_ok) {
-            return this.value as Ok;
+            return this.value as T;
         } else {
-            throw new Error(this.value as Err as string);
+            throw new Error(this.value as E as string);
         }
     }
-    unwrap_or(arg: Ok): Ok {
+    unwrap_or(arg: T): T {
         if (this.is_ok) {
-            return this.value as Ok;
+            return this.value as T;
         } else {
             return arg;
         }
     }
-    unwrap_or_else(fn: (arg0: Err) => Ok): Ok {
+    unwrap_or_else(fn: (arg0: E) => T): T {
         if (this.is_ok) {
-            return this.value as Ok;
+            return this.value as T;
         } else {
-            return fn(this.value as Err);
+            return fn(this.value as E);
+        }
+    }
+    static Ok<T, E>(arg: T) {
+        return new Res<T, E>(true, arg);
+    }
+    static Err<T, E>(err: E) {
+        return new Res<T, E>(false);
+    }
+    static try<T>(fn: () => T) {
+        try {
+            const v = fn();
+            return Res.Ok(v);
+        } catch (err) {
+            return Res.Err(err);
         }
     }
 }
